@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="webcam-capture-0.3">
+    <CLASSES>
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/webcam-capture-0.3.10-dist/webcam-capture-0.3.10.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/webcam-capture-0.3.10-dist/libs/bridj-0.6.2.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/webcam-capture-0.3.10-dist/libs/slf4j-api-1.7.2.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/webcam-capture-0.3.10-dist/docs/javadoc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="file:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/webcam-capture-0.3.10-dist/src" />
+    </SOURCES>
+  </library>
+</component>

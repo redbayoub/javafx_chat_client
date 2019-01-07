@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="controlsfx-8.40">
+    <CLASSES>
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/controlsfx-8.40.14/controlsfx-8.40.14.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/controlsfx-8.40.14/controlsfx-8.40.14-javadoc" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/controlsfx-8.40.14/controlsfx-8.40.14-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

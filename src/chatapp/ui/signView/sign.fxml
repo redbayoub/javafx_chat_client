@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2E3436;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatapp.ui.signView.Sign">
+   <children>
+      <Text fill="WHITE" layoutX="107.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Local">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Text>
+      <AnchorPane fx:id="globalPane" layoutX="324.0" layoutY="20.79443359375">
+         <children>
+            <Text fill="WHITE" layoutX="93.0" layoutY="22.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Global">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="68.0" layoutY="36.20556640625" strokeType="OUTSIDE" strokeWidth="0.0" text="Uses Internet network" />
+            <HBox layoutX="10.0" layoutY="305.20556640625" prefHeight="44.0" prefWidth="246.0" spacing="10.0">
+               <children>
+                  <JFXButton fx:id="logn_btn" onAction="#logIn" prefHeight="52.0" prefWidth="184.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: white;" text="Login" textFill="WHITE" />
+                  <JFXButton fx:id="sign_btn" layoutX="10.0" layoutY="10.0" onAction="#signUp" prefHeight="52.0" prefWidth="184.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: white;" text="Sign Up" textFill="WHITE" />
+               </children>
+            </HBox>
+            <AnchorPane fx:id="loginPane" layoutY="60.0" prefHeight="193.0" prefWidth="265.0">
+               <children>
+                  <JFXTextField fx:id="login_email" layoutX="10.0" layoutY="71.0" maxWidth="246.0" minWidth="218.0" prefHeight="32.0" prefWidth="246.0" promptText="Email" style="-fx-text-fill: white;" />
+                  <JFXPasswordField fx:id="login_password" layoutX="6.0" layoutY="111.0" maxWidth="234.0" minWidth="201.0" prefHeight="32.0" prefWidth="234.0" promptText="Password" style="-fx-text-fill: white;" />
+                  <JFXCheckBox fx:id="login_rem_log_info" checkedColor="#4059a9" layoutX="10.0" layoutY="160.0" prefHeight="16.0" prefWidth="246.0" text="Remeber login info" textFill="WHITE" />
+                  <ImageView fx:id="loginProfileAvatar" fitHeight="66.0" fitWidth="72.0" layoutX="100.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/defualt_user_avatar.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="SignUpPane" layoutY="48.0" prefHeight="246.0" prefWidth="265.0" visible="false">
+               <children>
+                  <VBox layoutX="24.0" layoutY="67.0" prefHeight="119.0" prefWidth="218.0" spacing="5.0">
+                     <children>
+                        <JFXTextField fx:id="signUsername" maxWidth="246.0" minWidth="218.0" prefHeight="32.0" prefWidth="246.0" promptText="Username" style="-fx-text-fill: white;" />
+                        <JFXTextField fx:id="signEmail" maxWidth="246.0" minWidth="218.0" prefHeight="32.0" prefWidth="246.0" promptText="Email" style="-fx-text-fill: white;" />
+                        <JFXPasswordField fx:id="signPassword" maxWidth="234.0" minWidth="201.0" prefHeight="32.0" prefWidth="234.0" promptText="Password" style="-fx-text-fill: white;" />
+                        <JFXPasswordField fx:id="signRePassorwd" maxWidth="234.0" minWidth="201.0" prefHeight="32.0" prefWidth="234.0" promptText="Rewite Password" style="-fx-text-fill: white;" />
+                        <JFXCheckBox fx:id="sign_rem_log_info" checkedColor="#4059a9" prefHeight="16.0" prefWidth="246.0" text="Remeber login info" textFill="WHITE" />
+                     </children>
+                  </VBox>
+                  <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="170.0" layoutY="2.0" onAction="#global_take_a_pic" text="Button">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="CAMERA" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="170.0" layoutY="32.0" onAction="#global_pick_a_pic" text="Button">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="FOLDER_OPEN" />
+                     </graphic>
+                  </JFXButton>
+                  <ImageView fx:id="signUpAvatar" accessibleText="default" fitHeight="66.0" fitWidth="72.0" layoutX="94.0" layoutY="-5.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/defualt_user_avatar.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+      <Separator layoutX="297.0" layoutY="27.0" orientation="VERTICAL" prefHeight="347.0" prefWidth="0.0" />
+      <Text fill="WHITE" layoutX="82.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Uses local network" />
+      <JFXTextField fx:id="localUsername" layoutX="25.0" layoutY="169.0" maxWidth="246.0" minWidth="218.0" prefHeight="32.0" prefWidth="246.0" promptText="Username" style="-fx-text-fill: white;" />
+      <JFXCheckBox fx:id="local_rem_log_info" checkedColor="#4059a9" layoutX="17.0" layoutY="225.0" prefHeight="16.0" prefWidth="246.0" text="Remeber login info" textFill="WHITE" />
+      <JFXButton layoutX="46.0" layoutY="274.0" onAction="#enter_chat" prefHeight="52.0" prefWidth="184.0" ripplerFill="WHITE" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: white;" text="Enter" textFill="WHITE" />
+      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="179.0" layoutY="84.0" onAction="#take_pic" text="Button">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="CAMERA" />
+         </graphic>
+      </JFXButton>
+      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="179.0" layoutY="114.0" onAction="#pic_a_pic" text="Button">
+         <graphic>
+            <FontAwesomeIconView fill="WHITE" glyphName="FOLDER_OPEN" />
+         </graphic>
+      </JFXButton>
+      <Text fill="RED" layoutX="579.0" layoutY="21.0" onMouseClicked="#close" stroke="#e82929" strokeType="OUTSIDE" text="X">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Text>
+      <ImageView fx:id="localProfileAvatar" accessibleText="default" fitHeight="66.0" fitWidth="72.0" layoutX="103.0" layoutY="77.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/defualt_user_avatar.png" />
+         </image>
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+      </ImageView>
+   </children>
+</AnchorPane>

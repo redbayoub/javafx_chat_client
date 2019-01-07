@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import org.controlsfx.control.GridView?>
+<StackPane fx:id="root_stack_pane" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatapp.ui.mainView.MainView">
+   <children>
+      <AnchorPane prefHeight="564.0" prefWidth="826.0">
+         <children>
+            <AnchorPane prefHeight="564.0" prefWidth="198.0" style="-fx-background-color: #040d10;">
+               <children>
+                  <VBox layoutX="15.0" layoutY="176.0" prefHeight="194.0" prefWidth="169.0">
+                     <children>
+                        <JFXButton graphicTextGap="10.0" onAction="#show_recent" prefHeight="37.0" prefWidth="169.0" text="Recent" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="LIST" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton graphicTextGap="10.0" layoutX="10.0" layoutY="10.0" onAction="#show_people_pane" prefHeight="37.0" prefWidth="169.0" text="Peoples" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="SEARCH" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton graphicTextGap="10.0" layoutX="10.0" layoutY="10.0" onAction="#show_frindes" prefHeight="37.0" prefWidth="169.0" text="Friends" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="USER" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton graphicTextGap="10.0" layoutX="10.0" layoutY="47.0" onAction="#show_groups" prefHeight="37.0" prefWidth="169.0" text="Groups" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="GROUP" />
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton graphicTextGap="10.0" layoutX="10.0" layoutY="84.0" onAction="#show_settings" prefHeight="37.0" prefWidth="169.0" text="Settings" textFill="WHITE">
+                           <graphic>
+                              <FontAwesomeIconView fill="WHITE" glyphName="GEAR" />
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutY="51.0" prefHeight="101.0" prefWidth="198.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="acount_avatar" fitHeight="85.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/defualt_user_avatar.png" />
+                           </image>
+                        </ImageView>
+                        <Text fx:id="account_username" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Red Ayoub" />
+                     </children>
+                  </VBox>
+                  <JFXButton graphicTextGap="5.0" layoutX="124.0" layoutY="22.0" onAction="#show_edit_acount" text="Edit" textFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="EDIT" />
+                     </graphic>
+                  </JFXButton>
+                  <JFXButton layoutX="15.0" layoutY="513.0" onAction="#logout" prefHeight="26.0" prefWidth="169.0" text="Logout" textFill="WHITE">
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="SIGN_OUT" />
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="198.0">
+               <children>
+                  <AnchorPane fx:id="main_root_pane">
+                     <children>
+                        <AnchorPane prefHeight="564.0" prefWidth="364.0" style="-fx-background-color: #2e3436;">
+                           <children>
+                              <StackPane prefHeight="37.0" prefWidth="364.0" style="-fx-background-color: #252A2B;">
+                                 <children>
+                                    <Text fx:id="tab_name" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Recent" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+                              <JFXListView fx:id="recent_msgs_list" layoutY="37.0" prefHeight="527.0" prefWidth="364.0" style="-fx-background-color: #2e3436;" />
+                              <JFXListView fx:id="freinds_list" layoutY="37.0" prefHeight="527.0" prefWidth="364.0" style="-fx-background-color: #2e3436;" visible="false" />
+                              <GridView fx:id="groups_list" layoutY="37.0" prefHeight="527.0" prefWidth="365.0" style="-fx-background-color: #2C3233;" visible="false" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="363.0" prefHeight="564.0" prefWidth="292.0" style="-fx-background-color: #575e60;">
+                           <children>
+                              <StackPane prefHeight="37.0" prefWidth="298.0" style="-fx-background-color: #464C4D;">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Chat" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+                              <JFXListView fx:id="chat_msg_list" layoutX="1.0" layoutY="37.0" prefHeight="417.0" prefWidth="297.0" style="-fx-background-color: #535A5B;" />
+                              <HBox layoutY="454.0" prefHeight="26.0" prefWidth="298.0" style="-fx-background-color: #464C4D;">
+                                 <children>
+                                    <JFXButton fx:id="add_text_btn" prefHeight="26.0" prefWidth="82.0" style="-fx-background-color: #040d10;" text="Text" textFill="WHITE" />
+                                    <JFXButton fx:id="add_image_btn" layoutX="10.0" layoutY="10.0" prefHeight="26.0" prefWidth="82.0" text="Image" textFill="WHITE" />
+                                    <JFXButton fx:id="add_audio_btn" layoutX="92.0" layoutY="10.0" prefHeight="26.0" prefWidth="82.0" text="Audio" textFill="WHITE" />
+                                    <JFXButton fx:id="add_video_btn" layoutX="92.0" layoutY="10.0" prefHeight="26.0" prefWidth="82.0" text="Video" textFill="WHITE" />
+                                    <JFXButton fx:id="add_file_btn" layoutX="158.0" layoutY="10.0" prefHeight="26.0" prefWidth="82.0" text="File" textFill="WHITE" />
+                                 </children>
+                              </HBox>
+                              <JFXButton fx:id="send_btn" contentDisplay="TOP" layoutX="235.0" layoutY="480.0" onAction="#send" prefHeight="83.0" prefWidth="62.0" style="-fx-background-color: #464C4D;" text="Send" textFill="WHITE">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="WHITE" glyphName="SEND" />
+                                 </graphic>
+                              </JFXButton>
+                              <AnchorPane layoutX="1.0" layoutY="481.0" prefHeight="83.0" prefWidth="234.0">
+                                 <children>
+                                    <JFXTextArea fx:id="send_text_content" maxWidth="298.0" minWidth="229.0" prefHeight="83.0" prefWidth="234.0" style="-fx-background-color: white;" />
+                                 </children>
+                              </AnchorPane>
+                              <AnchorPane fx:id="nothing_to_showPane" opacity="0.82" prefHeight="564.0" prefWidth="298.0" style="-fx-background-color: #535A5B;">
+                                 <children>
+                                    <Text fill="#d0cfcf" layoutX="79.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nothing to show here" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="people_root_pane" visible="false">
+                     <children>
+                        <AnchorPane prefHeight="564.0" prefWidth="364.0" style="-fx-background-color: #2e3436;">
+                           <children>
+                              <StackPane prefHeight="37.0" prefWidth="364.0" style="-fx-background-color: #252A2B;">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Peoples" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+                              <JFXListView fx:id="people_list" layoutY="74.0" prefHeight="490.0" prefWidth="364.0" style="-fx-background-color: #2e3436;" />
+                              <JFXTextField fx:id="username_to_find" layoutX="-1.0" layoutY="37.0" maxWidth="364.0" minWidth="279.0" prefHeight="37.0" prefWidth="364.0" promptText="Search by Username " style="-fx-text-fill: white;" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane layoutX="363.0" prefHeight="564.0" prefWidth="292.0" style="-fx-background-color: #575e60;">
+                           <children>
+                              <StackPane prefHeight="37.0" prefWidth="298.0" style="-fx-background-color: #464C4D;">
+                                 <children>
+                                    <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Friend Requests" StackPane.alignment="CENTER" />
+                                 </children>
+                              </StackPane>
+                              <JFXListView fx:id="recived_friends_requests" layoutX="1.0" layoutY="37.0" prefHeight="527.0" prefWidth="297.0" style="-fx-background-color: #535A5B;" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="edit_profile_pane" prefHeight="564.0" prefWidth="661.0" style="-fx-background-color: #2e3436;" visible="false">
+                     <children>
+                        <JFXTextField fx:id="edit_username" labelFloat="true" layoutX="66.0" layoutY="29.0" maxWidth="211.0" minWidth="211.0" prefHeight="32.0" prefWidth="211.0" promptText="Username: " style="-fx-text-fill: white;" />
+                        <JFXTextField fx:id="edit_email" labelFloat="true" layoutX="66.0" layoutY="78.0" maxWidth="219.0" minWidth="219.0" prefHeight="32.0" prefWidth="219.0" promptText="Email :" style="-fx-text-fill: white;" />
+                        <VBox alignment="CENTER" layoutX="392.0" layoutY="26.0" spacing="20.0">
+                           <children>
+                              <ImageView fx:id="edit_profile_image" fitHeight="85.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/defualt_user_avatar.png" />
+                                 </image>
+                              </ImageView>
+                              <HBox alignment="CENTER" prefHeight="52.0" prefWidth="234.0" spacing="5.0">
+                                 <children>
+                                    <JFXButton contentDisplay="TOP" onAction="#edit_pick_img_file" prefHeight="53.0" prefWidth="128.0" style="-fx-background-color: #16191A; -fx-background-radius: 10; -fx-border-radius: 10;" text="Pick From File" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="FOLDER_OPEN" />
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXButton contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#edt_take_shot" prefHeight="57.0" prefWidth="127.0" style="-fx-background-color: #16191A; -fx-background-radius: 10; -fx-border-radius: 10;" text="Take a shot" textFill="WHITE">
+                                       <graphic>
+                                          <FontAwesomeIconView fill="WHITE" glyphName="CAMERA" />
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <JFXPasswordField fx:id="edit_password" labelFloat="true" layoutX="66.0" layoutY="135.0" maxWidth="219.0" minWidth="182.0" prefHeight="32.0" prefWidth="219.0" promptText="Password :" style="-fx-text-fill: white;" />
+                        <JFXPasswordField fx:id="edit_re_password" labelFloat="true" layoutX="66.0" layoutY="192.0" maxWidth="219.0" minWidth="182.0" prefHeight="32.0" prefWidth="219.0" promptText="Rewrite Password :" style="-fx-text-fill: white;" />
+                        <HBox alignment="CENTER" layoutX="182.0" layoutY="332.0" prefHeight="83.0" prefWidth="297.0" spacing="5.0">
+                           <children>
+                              <JFXButton fx:id="save_changes_btn" contentDisplay="TOP" disable="true" onAction="#save_changes" prefHeight="86.0" prefWidth="180.0" style="-fx-background-color: #16191A; -fx-background-radius: 10; -fx-border-radius: 10;" text="Save" textFill="WHITE">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="WHITE" glyphName="SAVE" size="20" />
+                                 </graphic>
+                              </JFXButton>
+                              <JFXButton cancelButton="true" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" onAction="#cancel_changes" prefHeight="89.0" prefWidth="176.0" style="-fx-background-color: #16191A; -fx-background-radius: 10; -fx-border-radius: 10;" text="Cancel" textFill="WHITE">
+                                 <graphic>
+                                    <FontAwesomeIconView fill="WHITE" glyphName="TIMES" size="20" />
+                                 </graphic>
+                              </JFXButton>
+                           </children>
+                        </HBox>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

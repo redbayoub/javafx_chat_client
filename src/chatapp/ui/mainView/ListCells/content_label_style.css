@@ -1,0 +1,14 @@
+*{
+    -fx-border-radius:10;
+    -fx-border-color:black;
+    -fx-background-radius:10;
+}
+
+.sended{
+    -fx-background-color:#3465A4;
+    -fx-text-fill:white;
+}
+
+.recived{
+    -fx-background-color:#DCDCDC;
+}

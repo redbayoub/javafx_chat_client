@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component LANGUAGE_LEVEL="JDK_1_8" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/target/test-classes"/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<testFolder url="file://$MODULE_DIR$/Tests"/>
+		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
+		<excludeFolder url="file://$MODULE_DIR$/target"/>
+	</contentEntry>
+	<lib name="junit-4.10" scope="TEST"/>
+	<levels>
+		<level name="fontawesomefx-commons-8.15" value="project"/>
+		<level name="Notification" value="project"/>
+		<level name="controlsfx-8.40" value="project"/>
+		<level name="jfoenix-8.0.8" value="project"/>
+		<level name="junit-4.10" value="project"/>
+		<level name="webcam-capture-0.3" value="project"/>
+		<level name="Maven: org.glassfish.jersey.core:jersey-client:2.27" value="project"/>
+		<level name="Maven: javax.ws.rs:javax.ws.rs-api:2.1" value="project"/>
+		<level name="Maven: org.glassfish.jersey.core:jersey-common:2.27" value="project"/>
+		<level name="Maven: javax.annotation:javax.annotation-api:1.2" value="project"/>
+		<level name="Maven: org.glassfish.hk2:osgi-resource-locator:1.0.1" value="project"/>
+		<level name="Maven: org.glassfish.hk2.external:javax.inject:2.5.0-b42" value="project"/>
+		<level name="Maven: org.glassfish.jersey.media:jersey-media-multipart:2.27" value="project"/>
+		<level name="Maven: org.jvnet.mimepull:mimepull:1.9.6" value="project"/>
+	</levels>
+</component>
