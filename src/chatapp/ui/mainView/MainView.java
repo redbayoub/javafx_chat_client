@@ -10,6 +10,7 @@ import chatapp.classes.model.Group;
 import chatapp.classes.model.Message;
 import chatapp.classes.model.User;
 import chatapp.ui.dialogs.Dialogs;
+import chatapp.ui.mainView.AudioRecording.AudioRecording;
 import chatapp.ui.mainView.ListCells.*;
 import com.jfoenix.controls.*;
 import eu.hansolo.enzo.notification.Notification;
@@ -27,7 +28,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
@@ -72,6 +75,15 @@ public class MainView implements Initializable {
 
     @FXML
     private HBox root_chat_tools_pane;
+
+    @FXML
+    private VBox image_sending_pane;
+
+    @FXML
+    private VBox video_sending_pane;
+
+    @FXML
+    private StackPane audio_recording_pane;
 
 
     @FXML
@@ -141,6 +153,13 @@ public class MainView implements Initializable {
         // this has to be if the end of the constractor
         recentMessageFetcher=new RecentMessageFetcher(recent_msgs_list);
         recentMessageFetcher.start();
+
+        // test playing recording pane
+        try {
+            AudioRecording recording=new AudioRecording(audio_recording_pane, new FileChooser().showSaveDialog(null));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setup_groups_grid_view() {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox fx:id="recording_status_pane" alignment="CENTER" spacing="3.0">
+         <children>
+            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="Recoording ... (" />
+            <Text fx:id="recordedDuration" fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" />
+            <Text fill="RED" layoutX="205.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text=")" />
+         </children>
+      </HBox>
+      <StackPane fx:id="play_recorded_pane" prefHeight="60.0" prefWidth="325.0" />
+      <JFXButton fx:id="recoredbtn" graphicTextGap="5.0" onAction="#startOrStopOrReset" style="-fx-background-radius: 200; -fx-border-radius: 200;" text="Record" textFill="RED">
+         <graphic>
+            <FontAwesomeIconView fx:id="recoredBtnIcon" fill="RED" glyphName="CIRCLE" size="20" />
+         </graphic>
+      </JFXButton>
+   </children>
+   <padding>
+      <Insets bottom="5.0" top="5.0" />
+   </padding>
+</VBox>
