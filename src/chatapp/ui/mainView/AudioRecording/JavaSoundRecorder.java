@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.concurrent.Task;
 
 import javax.sound.sampled.*;
+import javax.ws.rs.NotSupportedException;
 import java.io.File;
 import java.io.IOException;
 
@@ -37,18 +38,13 @@ public class JavaSoundRecorder extends Task<Void>
 
             // checks if system supports the data line
             if (!AudioSystem.isLineSupported(info)) {
-                System.out.println("Line not supported");
-                System.exit(0);
+                throw new NotSupportedException("Data Line not supported");
             }
             line = (TargetDataLine) AudioSystem.getLine(info);
             line.open(format);
             line.start();   // start capturing
 
-            System.out.println("Start capturing...");
-
             AudioInputStream ais = new AudioInputStream(line);
-
-            System.out.println("Start recording...");
 
             // start recording
             startTime=System.currentTimeMillis();
@@ -105,7 +101,7 @@ public class JavaSoundRecorder extends Task<Void>
         if(timer!=null){
             timer.stop();
         }
-        System.out.println("Finished");
+
     }
 
 }
