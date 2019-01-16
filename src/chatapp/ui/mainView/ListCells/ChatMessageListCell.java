@@ -1,6 +1,7 @@
 package chatapp.ui.mainView.ListCells;
 
 import chatapp.classes.AppProperties;
+import chatapp.classes.CacheController;
 import chatapp.classes.ServerServices;
 import chatapp.classes.model.Message;
 import com.jfoenix.controls.JFXButton;
@@ -13,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
+import java.io.File;
 import java.util.List;
 
 public class ChatMessageListCell extends JFXListCell<Message> {
@@ -90,43 +92,48 @@ public class ChatMessageListCell extends JFXListCell<Message> {
             }
             // else
             HBox hBox=new HBox();
-
-            Label content=new Label();
-
             Pane pane=new Pane();
-            content.setWrapText(true);
-            content.setPadding(new Insets(5));
-            content.setMaxWidth(270); // currn max is 292
-            content.getStylesheets().add(getClass().getResource("content_label_style.css").toExternalForm());
-            HBox.setHgrow(pane, Priority.ALWAYS);
-            content.setText(item.getContent());
-            if(item.getSenderId()== AppProperties.currUser.getId()){
-                content.getStyleClass().add("sended");
-                hBox.getChildren().addAll(pane,content);
-            }else{
-                content.getStyleClass().add("recived");
-                //check if the perv mesage from the same sender
-                if((getIndex()-1>=0)&&
-                        getListView().getItems().get(getIndex()-1).getSenderId()!=getItem().getSenderId()){
-                    Image profile_image=new Image("/chatapp/images/defualt_user_avatar.png");
-                    ImageView profile_image_view=new ImageView(profile_image);
-                    profile_image_view.setFitHeight(25);
-                    profile_image_view.setFitWidth(25);
-                    profile_image_view.setPreserveRatio(true);
-                    AnchorPane.setTopAnchor(profile_image_view, 0.0);
-                    AnchorPane.setLeftAnchor(profile_image_view,0.0 );
-                    AnchorPane.setTopAnchor(content, 28.0);
-                    AnchorPane.setLeftAnchor(content, 28.0);
-                    hBox.getChildren().addAll(new AnchorPane(profile_image_view,content),pane);
-                }else{
-                    Pane margin=new Pane();
-                    margin.setMaxWidth(28);
-                    margin.setPrefWidth(28);
-                    margin.setMinWidth(28);
-                    hBox.getChildren().addAll(margin,content,pane);
-                }
+            if (item.isFile()){
+                File  file_content= CacheController.get_file(item.getContent());
 
+            }else{
+                Label content=new Label();
+                content.setWrapText(true);
+                content.setPadding(new Insets(5));
+                content.setMaxWidth(270); // currn max is 292
+                content.getStylesheets().add(getClass().getResource("content_label_style.css").toExternalForm());
+
+                content.setText(item.getContent());
+                if(item.getSenderId()== AppProperties.currUser.getId()){
+                    content.getStyleClass().add("sended");
+                    hBox.getChildren().addAll(pane,content);
+                }else{
+                    content.getStyleClass().add("recived");
+                    //check if the perv mesage from the same sender
+                    if((getIndex()-1>=0)&&
+                            getListView().getItems().get(getIndex()-1).getSenderId()!=getItem().getSenderId()){
+                        Image profile_image=CacheController.get_avatar(ServerServices.get_user_by_id(item.getSenderId()).getProfile_image_path());
+                        if(profile_image==null)profile_image=new Image("/chatapp/images/defualt_user_avatar.png");
+                        ImageView profile_image_view=new ImageView(profile_image);
+                        profile_image_view.setFitHeight(25);
+                        profile_image_view.setFitWidth(25);
+                        profile_image_view.setPreserveRatio(true);
+                        AnchorPane.setTopAnchor(profile_image_view, 0.0);
+                        AnchorPane.setLeftAnchor(profile_image_view,0.0 );
+                        AnchorPane.setTopAnchor(content, 28.0);
+                        AnchorPane.setLeftAnchor(content, 28.0);
+                        hBox.getChildren().addAll(new AnchorPane(profile_image_view,content),pane);
+                    }else{
+                        Pane margin=new Pane();
+                        margin.setMaxWidth(28);
+                        margin.setPrefWidth(28);
+                        margin.setMinWidth(28);
+                        hBox.getChildren().addAll(margin,content,pane);
+                    }
+
+                }
             }
+            HBox.setHgrow(pane, Priority.ALWAYS);
 
             setGraphic(hBox);
         }

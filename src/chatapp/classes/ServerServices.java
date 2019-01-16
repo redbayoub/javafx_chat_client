@@ -318,7 +318,14 @@ public class ServerServices {
                     .path(file_id)
                     .request(MediaType.APPLICATION_OCTET_STREAM_TYPE)
                     .get();
-            return response.readEntity(File.class);
+            String filename=response.getHeaderString("Content-Disposition");
+            InputStream file_is=response.readEntity(InputStream.class);
+
+            File tmp_file=new File(AppProperties.getTmp_dir(),filename);
+            FilesOperations.copy_file(file_is, tmp_file);
+
+            return tmp_file;
+
         }catch (Exception e){
             System.out.println(e);
             return null;

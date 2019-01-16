@@ -1,10 +1,7 @@
 package chatapp.ui.mainView;
 
-import chatapp.classes.AppProperties;
-import chatapp.classes.EmailConfirmation;
-import chatapp.classes.Encryption;
+import chatapp.classes.*;
 import chatapp.classes.Fetchers.*;
-import chatapp.classes.ServerServices;
 import chatapp.classes.model.FriendRequest;
 import chatapp.classes.model.Group;
 import chatapp.classes.model.Message;
@@ -14,6 +11,7 @@ import chatapp.ui.mainView.AudioRecording.AudioRecording;
 import chatapp.ui.mainView.ListCells.*;
 import com.jfoenix.controls.*;
 import eu.hansolo.enzo.notification.Notification;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -27,10 +25,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import org.controlsfx.control.GridCell;
 import org.controlsfx.control.GridView;
@@ -77,29 +74,11 @@ public class MainView implements Initializable {
     private HBox root_chat_tools_pane;
 
     @FXML
-    private VBox image_sending_pane;
+    private StackPane detailed_aciton_root_pane;
 
     @FXML
-    private VBox video_sending_pane;
+    private Pane detailed_action_pane;
 
-    @FXML
-    private StackPane audio_recording_pane;
-
-
-    @FXML
-    private JFXButton add_text_btn;
-
-    @FXML
-    private JFXButton add_image_btn;
-
-    @FXML
-    private JFXButton add_audio_btn;
-
-    @FXML
-    private JFXButton add_video_btn;
-
-    @FXML
-    private JFXButton add_file_btn;
 
     @FXML
     private JFXButton send_btn;
@@ -136,11 +115,7 @@ public class MainView implements Initializable {
         }
         account_username.setText(AppProperties.currUser.getUsername());
         if(AppProperties.currUser.getProfile_image_path()!=null && !AppProperties.currUser.getProfile_image_path().isEmpty()){
-            try {
-                acount_avatar.setImage(new Image(new FileInputStream(ServerServices.get_file(AppProperties.currUser.getProfile_image_path()))));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            acount_avatar.setImage(CacheController.get_avatar(AppProperties.currUser.getProfile_image_path()));
         }
 
         setup_recent_msg_list();
@@ -154,12 +129,7 @@ public class MainView implements Initializable {
         recentMessageFetcher=new RecentMessageFetcher(recent_msgs_list);
         recentMessageFetcher.start();
 
-        // test playing recording pane
-        try {
-            AudioRecording recording=new AudioRecording(audio_recording_pane, new FileChooser().showSaveDialog(null));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     private void setup_groups_grid_view() {
@@ -208,6 +178,17 @@ public class MainView implements Initializable {
             @Override
             public ListCell<Message> call(ListView<Message> param) {
                 return new ChatMessageListCell();
+            }
+        });
+
+        // on item clicked
+        chat_msg_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            Message msg=null;
+            if(newValue!=null)msg=newValue;
+            else{msg=oldValue;}
+            if(msg==null)return;
+            if(msg.isFile()){
+
             }
         });
 
@@ -327,6 +308,33 @@ public class MainView implements Initializable {
     }
 
     @FXML
+    void ask_add_audio(ActionEvent event) {
+        detailed_aciton_root_pane.setVisible(true);
+        // test playing recording pane
+        try {
+
+            AudioRecording recording=new AudioRecording(detailed_action_pane);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    void ask_add_file(ActionEvent event) {
+
+    }
+
+    @FXML
+    void ask_add_image(ActionEvent event) {
+
+    }
+
+    @FXML
+    void ask_add_video(ActionEvent event) {
+
+    }
+
+    @FXML
     void ask_typing_msg(MouseEvent event) {
         root_chat_tools_pane.setVisible(false);
         msg_typing_pane.setVisible(true);
@@ -336,7 +344,7 @@ public class MainView implements Initializable {
 
     @FXML
     void send_text_msg(ActionEvent event) {
-        if(!send_text_content.getText().isEmpty()){
+        if(!send_text_content.getText().trim().isEmpty()){
             Message message=new Message();
             message.setSenderId(AppProperties.currUser.getId());
             message.setReceiver_id(chatMessageFetcher.getSender_id());
@@ -356,6 +364,38 @@ public class MainView implements Initializable {
         msg_typing_pane.setVisible(false);
         send_text_content.setText("");
     }
+
+
+    @FXML
+    void send_detailed_action(ActionEvent event) throws FileNotFoundException {
+        File sended_file=((DetailedAction)detailed_action_pane.getUserData()).getResult_file();
+        if(sended_file!=null){ // send file
+            Message message=new Message();
+            message.setSenderId(AppProperties.currUser.getId());
+            message.setReceiver_id(chatMessageFetcher.getSender_id());
+            message.setGroupId(chatMessageFetcher.getGroup_id());
+            message.setFile(true);
+            message.setContent(ServerServices.upload_file(new FileInputStream(sended_file), sended_file.getName()));
+            Message recived_msg=ServerServices.send_message(message);
+            if(recived_msg!=null && recived_msg.getId()!=0){
+                chat_msg_list.getItems().add(recived_msg);
+                return_from_detailed_action(null);
+            }else{
+                AppProperties.showNotification("Message Sending Error", "Message Not Sended", Notification.ERROR_ICON);
+            }
+        }
+    }
+
+    @FXML
+    void return_from_detailed_action(ActionEvent event) {
+        detailed_aciton_root_pane.setVisible(false);
+        ((DetailedAction)detailed_action_pane.getUserData()).cleanup();
+        detailed_action_pane.setUserData(null);
+        detailed_action_pane.getChildren().clear();
+    }
+
+
+
 
    /* void send(ActionEvent event) {
         if(!send_text_content.getText().isEmpty()){
@@ -461,7 +501,8 @@ public class MainView implements Initializable {
 
 
     private void close() {
-        System.exit(1);
+        //System.exit(1);
+        Platform.exit();
     }
 
     // ========================== Edit Profile Pane =======================================
@@ -494,11 +535,7 @@ public class MainView implements Initializable {
         edit_profile_image.setAccessibleText(null);
 
         if(AppProperties.currUser.getProfile_image_path()!=null && !AppProperties.currUser.getProfile_image_path().isEmpty()) {
-            try {
-                edit_profile_image.setImage((new Image(new FileInputStream(ServerServices.get_file(AppProperties.currUser.getProfile_image_path())))));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+                edit_profile_image.setImage(CacheController.get_avatar(AppProperties.currUser.getProfile_image_path()));
         }else{
             edit_profile_image.setImage((new Image(getClass().getClassLoader().getResourceAsStream("chatapp/images/defualt_user_avatar.png"))));
         }

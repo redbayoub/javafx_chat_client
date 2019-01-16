@@ -12,26 +12,81 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Properties;
 
 public class AppProperties {
     private static Properties appProperties;
     public static User currUser;
+    private static File tmp_dir;
+
+
+    public static File getTmp_dir() {
+        return tmp_dir;
+    }
 
     public static Properties getProperties(){
         if (appProperties == null) {
             appProperties = new Properties();
             try {
                 appProperties.load(new FileInputStream("app.properties"));
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
+        initAbsentProperties();
+        if(tmp_dir==null){
+            tmp_dir=new File(URI.create(appProperties.getProperty("temp.directory.uri")));
+        }
         return appProperties;
+    }
+
+    private static void initAbsentProperties() {
+        boolean absent_exist=false;
+        if( appProperties.putIfAbsent("refresh.chat.interval", 20)==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("refresh.friend.request.interval",60 )==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("refresh.recent.msg.interval", 60)==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("refresh.friend.interval",60 )==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("refresh.group.interval",60 )==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("server.uri", "http\\://localhost\\:8080/")==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if(appProperties.putIfAbsent("cache.directory.max.size", "200M")==null&&!absent_exist){
+            absent_exist=true;
+        };
+        if (!appProperties.containsKey("temp.directory.uri")){
+            if(!absent_exist)absent_exist=true;
+           tmp_dir=new File("tmp");
+           tmp_dir.mkdir();
+           appProperties.put("temp.directory.uri", tmp_dir.toURI().toString());
+        }
+        if (!appProperties.containsKey("cache.directory.uri")){
+            if(!absent_exist)absent_exist=true;
+            File cache_dir=new File("cache");
+            cache_dir.mkdir();
+            appProperties.put("cache.directory.uri", cache_dir.toURI().toString());
+        }
+
+        //appProperties.putIfAbsent("cache.folder.path",new File("cache").mkdir( );
+        if(absent_exist) { // save cahnges
+            save_changes();
+        }
     }
 
     public static void save_changes(){
@@ -81,6 +136,7 @@ public class AppProperties {
                 primaryStage.setX(ev2.getScreenX()- xOffset);
                 primaryStage.setY(ev2.getScreenY()- yOffset);
             });
+
 
             // Need This if we change app properties
             /*primaryStage.setOnHidden(new EventHandler<WindowEvent>() {

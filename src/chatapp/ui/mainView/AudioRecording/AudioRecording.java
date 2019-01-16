@@ -1,5 +1,6 @@
 package chatapp.ui.mainView.AudioRecording;
 
+import chatapp.ui.mainView.DetailedAction;
 import chatapp.ui.mainView.MusicPlayer.MusicPlayer;
 import com.jfoenix.controls.JFXButton;
 import com.sun.istack.internal.NotNull;
@@ -10,25 +11,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public class AudioRecording {
+public class AudioRecording extends DetailedAction {
 
-    private VBox root_pane;
-    private File recorded_file;
-    public AudioRecording(@NotNull Pane container_pane,@NotNull File recorded_file) throws IOException {
+    /*private VBox root_pane;*/
+    public AudioRecording(@NotNull Pane container_pane) throws IOException {
+        super(container_pane,"wav");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AudioRecording.fxml"));
         loader.setController(this);
-        root_pane=loader.load();
-        container_pane.getChildren().add(root_pane);
-        this.recorded_file=recorded_file;
+        initRootPane(loader.load());
         init_recorder();
     }
+
 
     private final byte RECORD =1;
     private final byte STOP=2;
@@ -41,7 +39,7 @@ public class AudioRecording {
         recoredbtn.setText("RECORD");
         recoredBtnIcon.setGlyphName("CIRCLE");
 
-        recorder=new JavaSoundRecorder(recorded_file);
+        recorder=new JavaSoundRecorder(getResult_file());
         recorder.getElpased_time().addListener((observable, oldValue, newValue) -> {
             if(newValue.longValue()>oldValue.longValue()){
                 recordedDuration.setText(durationToString(newValue.longValue()));
@@ -49,9 +47,6 @@ public class AudioRecording {
         });
     }
 
-    public File getRecorded_file() {
-        return recorded_file;
-    }
 
     @FXML
     private HBox recording_status_pane;
@@ -103,7 +98,7 @@ public class AudioRecording {
     private void init_play_recorded_pane() {
         try {
             play_recorded_pane.setVisible(true);
-            MusicPlayer player=new MusicPlayer(play_recorded_pane, recorded_file);
+            MusicPlayer player=new MusicPlayer(play_recorded_pane, getResult_file());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -134,6 +129,13 @@ public class AudioRecording {
             }
         }
     }
+
+    @Override
+    public void cleanup() {
+        getResult_file().delete();
+
+    }
+
 
     private String durationToString(long milis) {
         return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(milis),

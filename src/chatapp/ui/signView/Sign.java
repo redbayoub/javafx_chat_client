@@ -1,9 +1,6 @@
 package chatapp.ui.signView;
 
-import chatapp.classes.AppProperties;
-import chatapp.classes.Encryption;
-import chatapp.classes.ServerInfo;
-import chatapp.classes.ServerServices;
+import chatapp.classes.*;
 import chatapp.classes.model.User;
 import chatapp.ui.dialogs.Dialogs;
 import com.jfoenix.controls.JFXButton;
@@ -205,15 +202,10 @@ public class Sign implements Initializable {
                     AppProperties.getProperties().put("global.password_sha1", retUser.getPassword_sha1());
                     if(retUser.getProfile_image_path()!=null && !retUser.getProfile_image_path().isEmpty()){
                         // save image to files
-                        try {
-                            File serv_file=ServerServices.get_file(retUser.getProfile_image_path());
-                            Image image=new Image(new FileInputStream(serv_file));
-                            String local_path =save_image(image,retUser.getUsername()+"_login_image.png" );
 
-                            AppProperties.getProperties().put("global.avatar",local_path );
-                        } catch (FileNotFoundException e) {
-                            e.printStackTrace();
-                        }
+                        Image serv_image = CacheController.get_avatar(retUser.getProfile_image_path());
+                        String local_path = save_image(serv_image, retUser.getUsername() + "_login_image.png");
+                        AppProperties.getProperties().put("global.avatar", local_path);
                     }
 
                     AppProperties.save_changes();

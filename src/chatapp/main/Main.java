@@ -1,12 +1,15 @@
 package chatapp.main;
 
 import chatapp.classes.AppProperties;
+import chatapp.classes.CacheController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.File;
 
 
 public class Main extends Application {
@@ -34,6 +37,18 @@ public class Main extends Application {
 
         primaryStage.show();
 
+    }
+
+    @Override
+    public void stop() throws Exception { // this method are automatically called before stoping the app
+        super.stop();
+        // clear tmp dir
+        for(File f:AppProperties.getTmp_dir().listFiles()){
+            f.delete();
+        }
+        // cleanup cache dir
+        CacheController.cleanup();
+        System.exit(1);
     }
 
     // to make window dragable
