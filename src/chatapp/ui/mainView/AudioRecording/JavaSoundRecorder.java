@@ -2,7 +2,6 @@ package chatapp.ui.mainView.AudioRecording;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.SimpleLongProperty;
-import javafx.concurrent.Task;
 
 import javax.sound.sampled.*;
 import javax.ws.rs.NotSupportedException;
@@ -14,7 +13,7 @@ import java.io.IOException;
  * www.codejava.net
  * http://www.codejava.net/coding/capture-and-record-sound-into-wav-file-with-java-sound-api
  */
-public class JavaSoundRecorder extends Task<Void>
+public class JavaSoundRecorder extends Thread
 {
     public JavaSoundRecorder(File result_file){
         this.wavFile=result_file;
@@ -30,8 +29,7 @@ public class JavaSoundRecorder extends Task<Void>
     private TargetDataLine line;
 
     @Override
-    protected Void call() throws Exception
-    {
+    public void run() {
         try {
             AudioFormat format = getAudioFormat();
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
@@ -49,15 +47,15 @@ public class JavaSoundRecorder extends Task<Void>
             // start recording
             startTime=System.currentTimeMillis();
             timer.start();
+
             AudioSystem.write(ais, fileType, wavFile);
 
         }
         catch (LineUnavailableException | IOException ex) {
             ex.printStackTrace();
         }
-
-        return null;
     }
+
 
     private SimpleLongProperty elpased_time=new SimpleLongProperty(0);
     private long startTime;
@@ -79,11 +77,12 @@ public class JavaSoundRecorder extends Task<Void>
      */
     private AudioFormat getAudioFormat()
     {
-        float sampleRate = 16000;
-        int sampleSizeInBits = 8;
+        // audio in recoding video
+        float sampleRate = 44100;// 44100
+        int sampleSizeInBits = 16; // 16
         int channels = 2;
         boolean signed = true;
-        boolean bigEndian = true;
+        boolean bigEndian = false; //false
         AudioFormat format = new AudioFormat(sampleRate, sampleSizeInBits,
                 channels, signed, bigEndian);
         return format;
@@ -92,7 +91,7 @@ public class JavaSoundRecorder extends Task<Void>
     /**
      * Closes the target data line to finish capturing and recording
      */
-    void finish()
+    public void finish()
     {
         if(line!=null){
             line.stop();
@@ -103,5 +102,25 @@ public class JavaSoundRecorder extends Task<Void>
         }
 
     }
+    public void pause()
+    {
+        if(line!=null && line.isRunning()){
+            line.stop();
+        }
+
+    }
+
+    public void resumeLine()
+    {
+        if(line!=null && !line.isRunning()){
+            try {
+                line.open();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 
 }

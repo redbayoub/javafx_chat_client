@@ -8,7 +8,9 @@ import chatapp.classes.model.Message;
 import chatapp.classes.model.User;
 import chatapp.ui.dialogs.Dialogs;
 import chatapp.ui.mainView.AudioRecording.AudioRecording;
+import chatapp.ui.mainView.ImagePicker.ImagePicker;
 import chatapp.ui.mainView.ListCells.*;
+import chatapp.ui.mainView.MusicPlayer.MediaPlayerUI;
 import com.jfoenix.controls.*;
 import eu.hansolo.enzo.notification.Notification;
 import javafx.application.Platform;
@@ -127,7 +129,6 @@ public class MainView implements Initializable {
 
         // this has to be if the end of the constractor
         recentMessageFetcher=new RecentMessageFetcher(recent_msgs_list);
-        recentMessageFetcher.start();
 
 
     }
@@ -154,10 +155,9 @@ public class MainView implements Initializable {
                                 chatMessageFetcher=null;
                             }
                             chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, 0, group.getGroup_id());
-                            chatMessageFetcher.start();
+
                         }else{
                             chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, 0,group.getGroup_id());
-                            chatMessageFetcher.start();
                         }
                     }
 
@@ -180,7 +180,7 @@ public class MainView implements Initializable {
                 return new ChatMessageListCell();
             }
         });
-
+        chat_msg_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // on item clicked
         chat_msg_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Message msg=null;
@@ -188,7 +188,10 @@ public class MainView implements Initializable {
             else{msg=oldValue;}
             if(msg==null)return;
             if(msg.isFile()){
-
+                if(msg.getUserData() instanceof MediaPlayerUI){
+                    MediaPlayerUI player=(MediaPlayerUI) msg.getUserData();
+                   player.playOrPause(null);
+                }
             }
         });
 
@@ -204,12 +207,13 @@ public class MainView implements Initializable {
         });
         freinds_list.setExpanded(true);
         freinds_list.depthProperty().set(1);
+        freinds_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // on item clicked
         freinds_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             User user=null;
             if(newValue!=null)user=newValue;
-            else{user=oldValue;}
             if(user==null)return;
+            if(user.getUserData()!=null && user.getUserData().equals(Lists_Selection_Listeners.IGNORE_SELCTION))return;
             nothing_to_showPane.setVisible(false);
             if(chatMessageFetcher!=null){
                 if(chatMessageFetcher.getSender_id()==user.getId()){
@@ -218,10 +222,9 @@ public class MainView implements Initializable {
                     chatMessageFetcher.stopThread();
                 }
                 chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, user.getId(), 0);
-                chatMessageFetcher.start();
+
             }else{
                 chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, user.getId(), 0);
-                chatMessageFetcher.start();
             }
 
 
@@ -235,6 +238,7 @@ public class MainView implements Initializable {
                 return new FriendRequestCell();
             }
         });
+        recived_friends_requests.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         recived_friends_requests.setExpanded(true);
         recived_friends_requests.depthProperty().set(1);
     }
@@ -276,13 +280,16 @@ public class MainView implements Initializable {
         });
         recent_msgs_list.setExpanded(true);
         recent_msgs_list.depthProperty().set(1);
+
         recent_msgs_list.getStylesheets().add(getClass().getResource("ListStyles/recent_list_style.css").toExternalForm());
+        recent_msgs_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // on item clicked
+
         recent_msgs_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Message msg=null;
             if(newValue!=null)msg=newValue;
-            else{msg=oldValue;};
             if(msg==null)return;
+            if(msg.getUserData()!=null && msg.getUserData().equals(Lists_Selection_Listeners.IGNORE_SELCTION))return;
             nothing_to_showPane.setVisible(false);
             if(chatMessageFetcher!=null){
                 if(chatMessageFetcher.getSender_id()==msg.getSenderId() || chatMessageFetcher.getGroup_id()==msg.getGroupId()){
@@ -291,10 +298,9 @@ public class MainView implements Initializable {
                     chatMessageFetcher.stopThread();
                 }
                 chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, msg.getSenderId(), msg.getGroupId());
-                chatMessageFetcher.start();
             }else{
                 chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, msg.getSenderId(), msg.getGroupId());
-                chatMessageFetcher.start();
+
             }
 
 
@@ -310,13 +316,9 @@ public class MainView implements Initializable {
     @FXML
     void ask_add_audio(ActionEvent event) {
         detailed_aciton_root_pane.setVisible(true);
-        // test playing recording pane
-        try {
 
-            AudioRecording recording=new AudioRecording(detailed_action_pane);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        AudioRecording recording=new AudioRecording(detailed_action_pane);
+
     }
 
     @FXML
@@ -326,12 +328,14 @@ public class MainView implements Initializable {
 
     @FXML
     void ask_add_image(ActionEvent event) {
-
+        detailed_aciton_root_pane.setVisible(true);
+        ImagePicker recording=new ImagePicker(detailed_action_pane);
     }
 
     @FXML
     void ask_add_video(ActionEvent event) {
-
+        File file= Dialogs.capture_a_video();
+        System.out.println(file.getAbsolutePath());
     }
 
     @FXML
@@ -354,6 +358,7 @@ public class MainView implements Initializable {
             Message recived_msg=ServerServices.send_message(message);
             if(recived_msg!=null && recived_msg.getId()!=0){
                 chat_msg_list.getItems().add(recived_msg);
+                return_to_root_chat_tools(null);
             }
         }
     }
@@ -426,11 +431,9 @@ public class MainView implements Initializable {
     void show_frindes(ActionEvent event) {
         if(friendRequestFetcher==null){
             friendRequestFetcher=new FriendRequestFetcher(recived_friends_requests);
-            friendRequestFetcher.start();
         }
         if(friendFetcher==null){
             friendFetcher=new FriendFetcher(freinds_list);
-            friendFetcher.start();
         }
         if(!main_root_pane.isVisible()){
             people_root_pane.setVisible(false);
@@ -446,7 +449,6 @@ public class MainView implements Initializable {
     void show_groups(ActionEvent event) {
         if(groupFetcher==null){
             groupFetcher=GroupFetcher.getInstance(groups_list);
-            groupFetcher.start();
         }
         if(!main_root_pane.isVisible()){
             people_root_pane.setVisible(false);
@@ -604,7 +606,7 @@ public class MainView implements Initializable {
 
     @FXML
     void edit_pick_img_file(ActionEvent event) {
-        File sel_file= Dialogs.pick_file(Dialogs.ContentType.Image);
+        File sel_file= Dialogs.pick_file(ContentType.Image);
         if(sel_file!=null){
             try {
                 edit_profile_image.setImage(new Image(sel_file.toURI().toURL().toExternalForm()));

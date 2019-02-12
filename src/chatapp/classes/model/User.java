@@ -16,7 +16,15 @@ public class User {
     private boolean is_confirmed;
     private String profile_image_path;
 
+    private Object UserData;
 
+    public Object getUserData() {
+        return UserData;
+    }
+
+    public void setUserData(Object userData) {
+        UserData = userData;
+    }
 
     public User() {
     }

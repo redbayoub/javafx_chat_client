@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="xuggler">
+    <CLASSES>
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/commons-cli-1.4/commons-cli-1.4.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/commons-lang3-3.8.1/commons-lang3-3.8.1.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/logback_jars/logback-classic-1.2.3.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/logback_jars/logback-core-1.2.3.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/slf4j_jars/slf4j-api-1.7.25.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/slf4j_jars/slf4j-simple-1.7.25.jar!/" />
+      <root url="jar:///mnt/8EF69C78F69C626F/programming/java lan/java liberries/xuggler/xuggle-xuggler-5.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

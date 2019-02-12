@@ -1,7 +1,7 @@
 package chatapp.ui.mainView.AudioRecording;
 
 import chatapp.ui.mainView.DetailedAction;
-import chatapp.ui.mainView.MusicPlayer.MusicPlayer;
+import chatapp.ui.mainView.MusicPlayer.MediaPlayerUI;
 import com.jfoenix.controls.JFXButton;
 import com.sun.istack.internal.NotNull;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
@@ -19,11 +19,15 @@ import java.util.concurrent.TimeUnit;
 public class AudioRecording extends DetailedAction {
 
     /*private VBox root_pane;*/
-    public AudioRecording(@NotNull Pane container_pane) throws IOException {
+    public AudioRecording(@NotNull Pane container_pane) {
         super(container_pane,"wav");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AudioRecording.fxml"));
         loader.setController(this);
-        initRootPane(loader.load());
+        try {
+            initRootPane(loader.load());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         init_recorder();
     }
 
@@ -69,8 +73,7 @@ public class AudioRecording extends DetailedAction {
     void startOrStopOrReset(ActionEvent event) {
         switch ((byte)recoredbtn.getUserData()){
             case RECORD:{
-                Thread recorderThread=new Thread(recorder);
-                recorderThread.start();
+                recorder.start();
 
                 switch_to_next_state();
                 break;
@@ -78,7 +81,7 @@ public class AudioRecording extends DetailedAction {
             case STOP:{
                 try {
                     recorder.finish();
-                    recorder.cancel();
+
                     init_play_recorded_pane();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -98,7 +101,7 @@ public class AudioRecording extends DetailedAction {
     private void init_play_recorded_pane() {
         try {
             play_recorded_pane.setVisible(true);
-            MusicPlayer player=new MusicPlayer(play_recorded_pane, getResult_file());
+            MediaPlayerUI player=new MediaPlayerUI(play_recorded_pane, getResult_file(),false);
         } catch (IOException e) {
             e.printStackTrace();
         }

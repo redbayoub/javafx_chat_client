@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXProgressBar?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #2E3436;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chatapp.ui.dialogs.capture_a_video.CaptureAVideo">
+   <children>
+      <VBox layoutY="26.0" prefHeight="375.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="26.0">
+         <children>
+            <JFXProgressBar fx:id="progress_bar" maxWidth="1.7976931348623157E308" prefHeight="5.0" />
+            <ImageView fx:id="feed_view" fitHeight="334.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" />
+            <StackPane VBox.vgrow="ALWAYS">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="3.0" prefWidth="600.0" spacing="10.0" StackPane.alignment="CENTER">
+                     <children>
+                        <JFXButton fx:id="redo_btn" onAction="#redo" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Redo" textFill="WHITE" />
+                        <JFXButton fx:id="cpt_brn" onAction="#capture" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Capture" textFill="WHITE" />
+                        <JFXButton onAction="#save" prefHeight="44.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Save" textFill="WHITE" />
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets bottom="5.0" top="5.0" />
+               </padding>
+            </StackPane>
+         </children>
+      </VBox>
+      <Text fill="RED" layoutX="579.0" layoutY="21.0" onMouseClicked="#close" strokeType="OUTSIDE" strokeWidth="0.0" text="X" AnchorPane.rightAnchor="7.298828125" AnchorPane.topAnchor="2.435546875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

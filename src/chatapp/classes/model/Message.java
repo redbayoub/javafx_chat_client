@@ -16,6 +16,16 @@ public class Message {
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private Date sending_date;
 
+    private Object UserData;
+
+    public Object getUserData() {
+        return UserData;
+    }
+
+    public void setUserData(Object userData) {
+        UserData = userData;
+    }
+
     public Message() {
     }
 

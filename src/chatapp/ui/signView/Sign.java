@@ -161,7 +161,7 @@ public class Sign implements Initializable {
 
     @FXML
     void global_pick_a_pic(ActionEvent event) throws MalformedURLException {
-        File chosen_file=Dialogs.pick_file(Dialogs.ContentType.Image);
+        File chosen_file=Dialogs.pick_file(ContentType.Image);
         if(chosen_file!=null){
             signUpAvatar.setImage(new Image(chosen_file.toURI().toURL().toExternalForm()));
             signUpAvatar.setAccessibleText("");
@@ -235,7 +235,7 @@ public class Sign implements Initializable {
 
     @FXML
     void pic_a_pic(ActionEvent event) throws MalformedURLException {
-        File sel_file= Dialogs.pick_file(Dialogs.ContentType.Image);
+        File sel_file= Dialogs.pick_file(ContentType.Image);
         if(sel_file!=null){
             localProfileAvatar.setImage(new Image(sel_file.toURI().toURL().toExternalForm()));
             localProfileAvatar.setAccessibleText("");

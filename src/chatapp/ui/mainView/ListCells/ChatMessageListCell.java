@@ -2,20 +2,25 @@ package chatapp.ui.mainView.ListCells;
 
 import chatapp.classes.AppProperties;
 import chatapp.classes.CacheController;
+import chatapp.classes.ContentType;
 import chatapp.classes.ServerServices;
 import chatapp.classes.model.Message;
-import com.jfoenix.controls.JFXButton;
+import chatapp.ui.mainView.MusicPlayer.MediaPlayerUI;
 import com.jfoenix.controls.JFXListCell;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class ChatMessageListCell extends JFXListCell<Message> {
 
@@ -39,13 +44,11 @@ public class ChatMessageListCell extends JFXListCell<Message> {
     @Override
     public void updateItem(Message item, boolean empty) {
 
-
-
         super.updateItem(item, empty);
         setText(null);
         setGraphic(null);
         if(item!=null&&!empty){
-            if(getIndex()==0&&item.getId()!=0&&item.getId()!=-1){ // ids used for spetial resones
+            /*if(getIndex()==0&&item.getId()!=0&&item.getId()!=-1){ // ids used for spetial resones
                 // add load more btn by cretain msg with id -1
                 Message sp_msg=new Message();
                 sp_msg.setId(-1);
@@ -89,12 +92,127 @@ public class ChatMessageListCell extends JFXListCell<Message> {
                 });
                 setGraphic(loadBtn_holder);
                 return;
-            }
+            }*/
             // else
             HBox hBox=new HBox();
             Pane pane=new Pane();
+
             if (item.isFile()){
-                File  file_content= CacheController.get_file(item.getContent());
+                setGraphic(new ProgressIndicator());
+                Thread thread=new Thread(() -> {
+                    File down_file=CacheController.get_file(item.getContent());
+                    Platform.runLater(() -> {
+                        Pane content_pane=new Pane();
+                        content_pane.setMaxWidth(250.0);
+                        switch (ContentType.get_type(down_file)){
+                            case Audio:{
+
+                                try {
+                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, down_file,true );
+                                    item.setUserData(playerUI);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case Video:{
+                                try {
+                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, down_file,true );
+                                    item.setUserData(playerUI);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case Image:{
+                                try {
+                                    ImageView imageView=new ImageView(down_file.toURI().toURL().toString());
+                                    imageView.setPreserveRatio(true);
+                                    imageView.setFitWidth(250);
+                                    //content_pane.setPrefHeight(200);
+                                    imageView.setFitWidth(200);
+                                    content_pane.getChildren().add(imageView);
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case File:{
+
+                                break;
+                            }
+                        }
+                        if(item.getSenderId()== AppProperties.currUser.getId()){
+                            hBox.getChildren().setAll(pane,content_pane);
+                        }else{
+                            hBox.getChildren().setAll(content_pane,pane);
+                        }
+                        HBox.setHgrow(pane, Priority.ALWAYS);
+                        setGraphic(hBox);
+                    });
+                });
+                /*Task<File> get_file=new Task<File>() {
+                    @Override
+                    protected File call() throws Exception {
+                        System.out.println("downloding "+item.getId());
+                        return  CacheController.get_file(item.getContent());
+                    }
+                };
+
+                get_file.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        Pane content_pane=new Pane();
+                        content_pane.setMaxWidth(250.0);
+                        switch (ContentType.get_type(get_file.getValue())){
+                            case Audio:{
+
+                                try {
+                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, get_file.getValue(),true );
+                                    item.setUserData(playerUI);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case Video:{
+                                try {
+                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, get_file.getValue(),true );
+                                    item.setUserData(playerUI);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case Image:{
+                                try {
+                                    ImageView imageView=new ImageView(get_file.getValue().toURI().toURL().toString());
+                                    imageView.setPreserveRatio(true);
+                                    imageView.setFitWidth(250);
+                                    //content_pane.setPrefHeight(200);
+                                    imageView.setFitWidth(200);
+                                    content_pane.getChildren().add(imageView);
+                                } catch (MalformedURLException e) {
+                                    e.printStackTrace();
+                                }
+                                break;
+                            }
+                            case File:{
+
+                                break;
+                            }
+                        }
+                        if(item.getSenderId()== AppProperties.currUser.getId()){
+                            hBox.getChildren().setAll(pane,content_pane);
+                        }else{
+                            hBox.getChildren().setAll(content_pane,pane);
+                        }
+
+                    }
+                });
+                Thread getting_file_th=new Thread(get_file);
+                getting_file_th.start();*/
+                thread.start();
 
             }else{
                 Label content=new Label();
@@ -132,10 +250,11 @@ public class ChatMessageListCell extends JFXListCell<Message> {
                     }
 
                 }
+                HBox.setHgrow(pane, Priority.ALWAYS);
+                setGraphic(hBox);
             }
-            HBox.setHgrow(pane, Priority.ALWAYS);
-
-            setGraphic(hBox);
+            /*HBox.setHgrow(pane, Priority.ALWAYS);
+            setGraphic(hBox);*/
         }
     }
 

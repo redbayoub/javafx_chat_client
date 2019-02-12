@@ -131,7 +131,13 @@ public final class CacheController {
 
     public static void cleanup(){
         for (File f:CACHE_DIR.listFiles()) {
-            f.delete();
+            if(f.isDirectory()){
+                for(File f2:f.listFiles()){
+                    System.out.println(f2.getName() +(f2.delete()?" Delated":" Not Deleated"));
+                }
+            }
+
+            System.out.println(f.getName() +(f.delete()?" Delated":" Not Deleated"));
         }
         cached_files.clear();
         cached_avatars.clear();
