@@ -6,11 +6,11 @@
 <?import javafx.scene.layout.VBox?>
 <VBox style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fx:id="image_view" fitHeight="200.0" fitWidth="325.0" pickOnBounds="true" preserveRatio="true" />
-      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="200.0" spacing="5.0">
+      <ImageView fx:id="image_view" fitHeight="200.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true" />
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <JFXButton onAction="#take_a_picture" text="Take a picture" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-            <JFXButton layoutX="10.0" layoutY="10.0" onAction="#pick_a_picture_from_files" text="Pick from files" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+            <JFXButton onAction="#take_a_picture" style="-fx-border-color: white; -fx-border-radius: 20; -fx-border-width: 2;" text="Take a picture" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+            <JFXButton layoutX="10.0" layoutY="10.0" onAction="#pick_a_picture_from_files" style="-fx-border-color: white; -fx-border-radius: 20; -fx-border-width: 2;" text="Pick from files" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
          </children>
       </HBox>
    </children>

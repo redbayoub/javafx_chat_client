@@ -3,9 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.VBox?>
-<VBox fillWidth="false" spacing="2.0" style="-fx-background-color: #1C1F1F;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fillWidth="false" spacing="2.0" style="-fx-background-color: #1C1F1F;" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Slider fx:id="progress_slider" />
+      <Slider fx:id="progress_slider" maxWidth="1.7976931348623157E308" prefWidth="200.0" />
    </children>
    <padding>
       <Insets bottom="2.0" left="5.0" right="5.0" top="2.0" />

@@ -17,7 +17,7 @@
          </children>
       </HBox>
       <StackPane fx:id="play_recorded_pane" prefHeight="60.0" prefWidth="325.0" />
-      <JFXButton fx:id="recoredbtn" graphicTextGap="5.0" onAction="#startOrStopOrReset" style="-fx-background-radius: 200; -fx-border-radius: 200;" text="Record" textFill="RED">
+      <JFXButton fx:id="recoredbtn" graphicTextGap="5.0" onAction="#startOrStopOrReset" style="-fx-border-radius: 20; -fx-border-color: white; -fx-border-width: 2;" text="Record" textFill="RED">
          <graphic>
             <FontAwesomeIconView fx:id="recoredBtnIcon" fill="RED" glyphName="CIRCLE" size="20" />
          </graphic>

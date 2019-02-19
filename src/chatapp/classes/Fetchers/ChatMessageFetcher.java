@@ -1,6 +1,7 @@
 package chatapp.classes.Fetchers;
 
 import chatapp.classes.AppProperties;
+import chatapp.classes.Messages;
 import chatapp.classes.ServerServices;
 import chatapp.classes.model.Message;
 import com.jfoenix.controls.JFXListView;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class ChatMessageFetcher extends AbstractFetcher{
     private static JFXListView<Message> chat_msg_list;
+
     private int sender_id;
     private int group_id;
 
@@ -41,6 +43,9 @@ public class ChatMessageFetcher extends AbstractFetcher{
             tamplate.setSending_date(new Date());
             List<Message> msgs= ServerServices.getChatMessages(tamplate,false);
             System.out.println(msgs);
+            if(msgs.size()==10){
+                msgs.add(0,Messages.get_load_more_data_msg());
+            }
             Platform.runLater(()-> {
                 chat_msg_list.getItems().setAll(msgs);
                 chat_msg_list.scrollTo(msgs.size()-1);

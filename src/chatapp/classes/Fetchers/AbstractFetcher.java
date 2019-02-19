@@ -1,5 +1,7 @@
 package chatapp.classes.Fetchers;
 
+import chatapp.classes.Messages;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -27,6 +29,7 @@ public abstract class AbstractFetcher {
     protected abstract void run_fetcher();
 
     public final void stopThread(){
+        Messages.mediaPlayers.clear();
         running=false;
         task.cancel(true);
     }

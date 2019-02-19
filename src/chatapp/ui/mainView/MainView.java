@@ -10,7 +10,8 @@ import chatapp.ui.dialogs.Dialogs;
 import chatapp.ui.mainView.AudioRecording.AudioRecording;
 import chatapp.ui.mainView.ImagePicker.ImagePicker;
 import chatapp.ui.mainView.ListCells.*;
-import chatapp.ui.mainView.MusicPlayer.MediaPlayerUI;
+import chatapp.ui.mainView.MediaPlayer.MediaPlayerUI;
+import chatapp.ui.mainView.VideoRecording.VideoRecording;
 import com.jfoenix.controls.*;
 import eu.hansolo.enzo.notification.Notification;
 import javafx.application.Platform;
@@ -27,7 +28,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
@@ -79,7 +79,7 @@ public class MainView implements Initializable {
     private StackPane detailed_aciton_root_pane;
 
     @FXML
-    private Pane detailed_action_pane;
+    private StackPane detailed_action_pane;
 
 
     @FXML
@@ -177,23 +177,20 @@ public class MainView implements Initializable {
         chat_msg_list.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>() {
             @Override
             public ListCell<Message> call(ListView<Message> param) {
-                return new ChatMessageListCell();
+                ChatMessageListCell listCell=new ChatMessageListCell();
+                listCell.setOnMouseClicked((ev)->{
+                    ChatMessageListCell cell=(ChatMessageListCell) ev.getSource();
+                    if(cell.getItem().isFile()){
+                        MediaPlayerUI player=Messages.mediaPlayers.get(cell.getItem().getId());
+                        if(player!=null){
+                            player.playOrPause(null);
+                        }
+                    }
+                });
+                return listCell;
             }
         });
         chat_msg_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        // on item clicked
-        chat_msg_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Message msg=null;
-            if(newValue!=null)msg=newValue;
-            else{msg=oldValue;}
-            if(msg==null)return;
-            if(msg.isFile()){
-                if(msg.getUserData() instanceof MediaPlayerUI){
-                    MediaPlayerUI player=(MediaPlayerUI) msg.getUserData();
-                   player.playOrPause(null);
-                }
-            }
-        });
 
     }
 
@@ -202,14 +199,30 @@ public class MainView implements Initializable {
         freinds_list.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {
             @Override
             public ListCell<User> call(ListView<User> param) {
-                return new FriendListCell();
+                FriendListCell listCell=new FriendListCell();
+                listCell.setOnMouseClicked((ev)->{
+                    FriendListCell cell=(FriendListCell)ev.getSource();
+                    User user=cell.getItem();
+                    nothing_to_showPane.setVisible(false);
+                    if(chatMessageFetcher!=null){
+                        if(chatMessageFetcher.getSender_id()==user.getId()){
+                            // DO Nothing
+                        }else{
+                            chatMessageFetcher.stopThread();
+                            chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, user.getId(), 0);
+                        }
+                    }else{
+                        chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, user.getId(), 0);
+                    }
+                });
+                return listCell;
             }
         });
         freinds_list.setExpanded(true);
         freinds_list.depthProperty().set(1);
         freinds_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // on item clicked
-        freinds_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        /*freinds_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             User user=null;
             if(newValue!=null)user=newValue;
             if(user==null)return;
@@ -228,7 +241,7 @@ public class MainView implements Initializable {
             }
 
 
-        });
+        });*/
     }
 
     private void setup_recived_friends_requests_list() {
@@ -275,7 +288,25 @@ public class MainView implements Initializable {
         recent_msgs_list.setCellFactory(new Callback<ListView<Message>, ListCell<Message>>(){
             @Override
             public ListCell<Message> call(ListView<Message> param) {
-                return new RecentListCell();
+                RecentListCell listCell=new RecentListCell();
+                listCell.setOnMouseClicked(event -> {
+                    RecentListCell cell=(RecentListCell)event.getSource();
+                    Message msg=cell.getItem();
+                    nothing_to_showPane.setVisible(false);
+                    if(chatMessageFetcher!=null){
+                        if(chatMessageFetcher.getSender_id()==msg.getSenderId() || chatMessageFetcher.getGroup_id()==msg.getGroupId()){
+                            // DO Nothing
+                        }else{
+                            chatMessageFetcher.stopThread();
+                            chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, msg.getSenderId(), msg.getGroupId());
+                        }
+
+                    }else{
+                        chatMessageFetcher=new ChatMessageFetcher(chat_msg_list, msg.getSenderId(), msg.getGroupId());
+
+                    }
+                });
+                return listCell;
             }
         });
         recent_msgs_list.setExpanded(true);
@@ -285,7 +316,7 @@ public class MainView implements Initializable {
         recent_msgs_list.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         // on item clicked
 
-        recent_msgs_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        /*recent_msgs_list.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             Message msg=null;
             if(newValue!=null)msg=newValue;
             if(msg==null)return;
@@ -304,7 +335,7 @@ public class MainView implements Initializable {
             }
 
 
-        });
+        });*/
     }
 
     @FXML
@@ -322,7 +353,10 @@ public class MainView implements Initializable {
     }
 
     @FXML
-    void ask_add_file(ActionEvent event) {
+    void ask_add_file(ActionEvent event) throws FileNotFoundException {
+        File f=Dialogs.pick_file(ContentType.File);
+        if(f!=null)
+            send_file(f);
 
     }
 
@@ -334,8 +368,8 @@ public class MainView implements Initializable {
 
     @FXML
     void ask_add_video(ActionEvent event) {
-        File file= Dialogs.capture_a_video();
-        System.out.println(file.getAbsolutePath());
+        detailed_aciton_root_pane.setVisible(true);
+        VideoRecording videoRecording=new VideoRecording(detailed_action_pane);
     }
 
     @FXML
@@ -374,6 +408,11 @@ public class MainView implements Initializable {
     @FXML
     void send_detailed_action(ActionEvent event) throws FileNotFoundException {
         File sended_file=((DetailedAction)detailed_action_pane.getUserData()).getResult_file();
+        send_file(sended_file);
+        return_from_detailed_action(null);
+    }
+
+    private void send_file(File sended_file) throws FileNotFoundException {
         if(sended_file!=null){ // send file
             Message message=new Message();
             message.setSenderId(AppProperties.currUser.getId());
@@ -384,7 +423,6 @@ public class MainView implements Initializable {
             Message recived_msg=ServerServices.send_message(message);
             if(recived_msg!=null && recived_msg.getId()!=0){
                 chat_msg_list.getItems().add(recived_msg);
-                return_from_detailed_action(null);
             }else{
                 AppProperties.showNotification("Message Sending Error", "Message Not Sended", Notification.ERROR_ICON);
             }
@@ -398,24 +436,6 @@ public class MainView implements Initializable {
         detailed_action_pane.setUserData(null);
         detailed_action_pane.getChildren().clear();
     }
-
-
-
-
-   /* void send(ActionEvent event) {
-        if(!send_text_content.getText().isEmpty()){
-            Message message=new Message();
-            message.setSenderId(AppProperties.currUser.getId());
-            message.setReceiver_id(chatMessageFetcher.getSender_id());
-            message.setGroupId(chatMessageFetcher.getGroup_id());
-            message.setFile(false); // this can be change according to selected tab
-            message.setContent(send_text_content.getText());
-            Message recived_msg=ServerServices.send_message(message);
-            if(recived_msg!=null && recived_msg.getId()!=0){
-                chat_msg_list.getItems().add(recived_msg);
-            }
-        }
-    }*/
 
     @FXML
     void show_edit_acount(ActionEvent event) {

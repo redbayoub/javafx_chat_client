@@ -26,15 +26,19 @@ public class CaptureAVideo implements Initializable {
     @FXML
     private JFXButton cpt_brn;
 
+
+    @FXML
+    private JFXButton save_btn;
     @FXML
     private JFXButton redo_btn;
 
     private VideoRecorder videoRecorder;
+    private Webcam webcam;
     public static File captured_video;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Webcam webcam=Webcam.getDefault();
+        webcam=Webcam.getDefault();
         Dimension dimension=webcam.getViewSizes()[webcam.getViewSizes().length-1];
         webcam.setViewSize(dimension);
         feed_view.setFitHeight(dimension.height);
@@ -42,31 +46,25 @@ public class CaptureAVideo implements Initializable {
         feed_view.setSmooth(true);
         captured_video=new File(AppProperties.getTmp_dir(),String.format("%d.mp4",System.currentTimeMillis()));
         videoRecorder=new VideoRecorder(captured_video, feed_view,webcam,progress_bar );
-        redo_btn.setDisable(true);
+
     }
 
-    private final int CAPTURING=1;
-    private final int PAUSED=2;
 
     @FXML
     void capture(ActionEvent event) {
-        if(cpt_brn.getUserData()==null || cpt_brn.getUserData().equals(CAPTURING)){
-            videoRecorder.capture();
-            cpt_brn.setUserData(PAUSED);
-            cpt_brn.setText("Pause");
-        }else {
-            videoRecorder.pause();
-            cpt_brn.setUserData(CAPTURING);
-            cpt_brn.setText("Continue");
-        }
+        videoRecorder.capture();
         redo_btn.setDisable(false);
+        save_btn.setDisable(false);
+        cpt_brn.setDisable(true);
     }
 
     @FXML
     void redo(ActionEvent event) {
-        videoRecorder.redo();
-        cpt_brn.setUserData(CAPTURING);
-        cpt_brn.setText("Capture");
+        //videoRecorder.redo();
+        videoRecorder.clean_up();
+        videoRecorder=new VideoRecorder(captured_video, feed_view,webcam,progress_bar );
+        cpt_brn.setDisable(false);
+        save_btn.setDisable(true);
         redo_btn.setDisable(true);
     }
 

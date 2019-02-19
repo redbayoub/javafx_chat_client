@@ -1,7 +1,7 @@
 package chatapp.ui.mainView.AudioRecording;
 
 import chatapp.ui.mainView.DetailedAction;
-import chatapp.ui.mainView.MusicPlayer.MediaPlayerUI;
+import chatapp.ui.mainView.MediaPlayer.MediaPlayerUI;
 import com.jfoenix.controls.JFXButton;
 import com.sun.istack.internal.NotNull;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;

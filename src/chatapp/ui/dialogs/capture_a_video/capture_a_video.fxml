@@ -17,9 +17,9 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="3.0" prefWidth="600.0" spacing="10.0" StackPane.alignment="CENTER">
                      <children>
-                        <JFXButton fx:id="redo_btn" onAction="#redo" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Redo" textFill="WHITE" />
+                        <JFXButton fx:id="redo_btn" disable="true" onAction="#redo" prefHeight="40.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Redo" textFill="WHITE" />
                         <JFXButton fx:id="cpt_brn" onAction="#capture" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Capture" textFill="WHITE" />
-                        <JFXButton onAction="#save" prefHeight="44.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Save" textFill="WHITE" />
+                        <JFXButton fx:id="save_btn" disable="true" onAction="#save" prefHeight="44.0" prefWidth="70.0" style="-fx-background-color: #212121; -fx-background-radius: 10; -fx-border-color: white; -fx-border-radius: 10;" text="Save" textFill="WHITE" />
                      </children>
                      <StackPane.margin>
                         <Insets />

@@ -32,4 +32,22 @@ public enum ContentType {
         }
         return File;
     }
+    public static ContentType get_type(String filename){
+        for (String image_ext:Image.exts) {
+            if(filename.endsWith(image_ext.substring(image_ext.indexOf('.')+1))){
+                return Image;
+            }
+        }
+        for (String image_ext:Video.exts) {
+            if(filename.endsWith(image_ext.substring(image_ext.indexOf('.')+1))){
+                return Video;
+            }
+        }
+        for (String image_ext:Audio.exts) {
+            if(filename.endsWith(image_ext.substring(image_ext.indexOf('.')+1))){
+                return Audio;
+            }
+        }
+        return File;
+    }
 }

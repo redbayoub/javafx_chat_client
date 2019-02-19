@@ -1,4 +1,4 @@
-package chatapp.ui.mainView.MusicPlayer;
+package chatapp.ui.mainView.MediaPlayer;
 
 import chatapp.classes.ContentType;
 import com.jfoenix.controls.JFXButton;
@@ -47,6 +47,7 @@ public class MediaPlayerUI {
         @Override
         protected Void call() throws Exception {
             mediaPlayer=new MediaPlayer(new Media(played_file.toURI().toString()));
+            if(mediaView!=null)mediaView.setMediaPlayer(mediaPlayer);
             mediaPlayer.setOnReady(() -> {
                 if(!mini_player){
                     playBtn.setDisable(false);
@@ -87,6 +88,7 @@ public class MediaPlayerUI {
                 }
                 case Video:{
                     mediaView=new MediaView(mediaPlayer);
+                    mediaView.setFitWidth(200);
                     mediaView.setPreserveRatio(true);
                     root_pane.getChildren().add(0,mediaView);
                     break;
@@ -104,8 +106,8 @@ public class MediaPlayerUI {
                 }
                 case Video:{
                     mediaView=new MediaView();
+                    mediaView.setFitWidth(298);
                     mediaView.setPreserveRatio(true);
-
                     root_pane.getChildren().add(0,mediaView);
                     prepare_mediaPlayer.run();
                     break;

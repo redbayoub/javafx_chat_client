@@ -17,6 +17,21 @@ public class JavaSoundRecorder extends Thread
 {
     public JavaSoundRecorder(File result_file){
         this.wavFile=result_file;
+        AudioFormat format = getAudioFormat();
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+
+        // checks if system supports the data line
+        if (!AudioSystem.isLineSupported(info)) {
+            throw new NotSupportedException("Data Line not supported");
+        }
+        try {
+            line = (TargetDataLine) AudioSystem.getLine(info);
+
+            line.open(format);
+            line.start();   // start capturing
+        } catch (LineUnavailableException e) {
+            e.printStackTrace();
+        }
     }
 
     // path of the wav file
@@ -31,19 +46,8 @@ public class JavaSoundRecorder extends Thread
     @Override
     public void run() {
         try {
-            AudioFormat format = getAudioFormat();
-            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-
-            // checks if system supports the data line
-            if (!AudioSystem.isLineSupported(info)) {
-                throw new NotSupportedException("Data Line not supported");
-            }
-            line = (TargetDataLine) AudioSystem.getLine(info);
-            line.open(format);
-            line.start();   // start capturing
 
             AudioInputStream ais = new AudioInputStream(line);
-
             // start recording
             startTime=System.currentTimeMillis();
             timer.start();
@@ -51,7 +55,7 @@ public class JavaSoundRecorder extends Thread
             AudioSystem.write(ais, fileType, wavFile);
 
         }
-        catch (LineUnavailableException | IOException ex) {
+        catch ( IOException ex) {
             ex.printStackTrace();
         }
     }
@@ -59,6 +63,7 @@ public class JavaSoundRecorder extends Thread
 
     private SimpleLongProperty elpased_time=new SimpleLongProperty(0);
     private long startTime;
+
     public SimpleLongProperty getElpased_time() {
         return elpased_time;
     }
@@ -102,25 +107,4 @@ public class JavaSoundRecorder extends Thread
         }
 
     }
-    public void pause()
-    {
-        if(line!=null && line.isRunning()){
-            line.stop();
-        }
-
-    }
-
-    public void resumeLine()
-    {
-        if(line!=null && !line.isRunning()){
-            try {
-                line.open();
-            } catch (LineUnavailableException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-
 }

@@ -9,7 +9,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import javax.ws.rs.core.HttpHeaders;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 
 
 public class Main extends Application {
@@ -57,8 +62,22 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 
-        launch(args);
+        //launch(args);
+        test();
+    }
 
+    private static void test() {
+        try {
+            URL url=new URL("http://localhost:8080/upload/files/5c162a71f90084122459633a");
+            URLConnection connection=url.openConnection();
+            String name=connection.getHeaderField(HttpHeaders.CONTENT_DISPOSITION);
+            System.out.println(name);
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

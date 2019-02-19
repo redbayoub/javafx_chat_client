@@ -145,22 +145,22 @@
                                     </VBox>
                                     <StackPane fx:id="detailed_aciton_root_pane" visible="false">
                                        <children>
-                                          <VBox alignment="CENTER" maxWidth="299.0" minWidth="299.0" opacity="0.73" prefHeight="204.0" prefWidth="299.0" style="-fx-background-color: black;">
+                                          <VBox alignment="CENTER" maxWidth="299.0" minWidth="299.0" prefHeight="204.0" prefWidth="299.0" style="-fx-background-color: rgba(0, 0, 0, 0.7);" StackPane.alignment="CENTER">
                                              <children>
-                                                <Pane fx:id="detailed_action_pane" maxHeight="1.7976931348623157E308" maxWidth="299.0" minWidth="299.0" prefWidth="299.0" VBox.vgrow="NEVER" />
-                                                <AnchorPane VBox.vgrow="NEVER">
+                                                <StackPane fx:id="detailed_action_pane" VBox.vgrow="NEVER" />
+                                                <AnchorPane style="-fx-background-color: rgba(0, 0, 0, 0.7);" VBox.vgrow="NEVER">
                                                    <children>
-                                                      <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#return_from_detailed_action" text="Return" textFill="WHITE" AnchorPane.leftAnchor="0.0">
+                                                      <JFXButton contentDisplay="GRAPHIC_ONLY" onAction="#return_from_detailed_action" style="-fx-border-color: white; -fx-border-radius: 10; -fx-border-width: 2;" text="Return" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <graphic>
                                                             <FontAwesomeIconView fill="WHITE" glyphName="ARROW_LEFT" size="20" />
                                                          </graphic></JFXButton>
-                                                      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="248.0" onAction="#send_detailed_action" text="Sand" textFill="WHITE" AnchorPane.rightAnchor="0.0">
+                                                      <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="248.0" onAction="#send_detailed_action" style="-fx-border-color: white; -fx-border-radius: 10; -fx-border-width: 2;" text="Sand" textFill="WHITE" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                          <graphic>
                                                             <FontAwesomeIconView fill="WHITE" glyphName="SEND" size="20" />
                                                          </graphic></JFXButton>
                                                    </children>
                                                    <padding>
-                                                      <Insets left="10.0" right="10.0" />
+                                                      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                                    </padding>
                                                 </AnchorPane>
                                              </children>
