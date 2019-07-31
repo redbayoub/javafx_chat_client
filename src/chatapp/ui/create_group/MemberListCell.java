@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 public class MemberListCell extends JFXListCell<User> {
 
     private HBox hBox=new HBox();
-    private Image profile_image=new Image("/chatapp/images/defualt_user_avatar.png");
+    private Image profile_image=new Image("/images/defualt_user_avatar.png");
     private ImageView profile_image_view=new ImageView(profile_image);
     private Label profile_username=new Label();
     private Pane pane=new Pane();

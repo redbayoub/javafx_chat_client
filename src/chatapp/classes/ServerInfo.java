@@ -9,8 +9,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.net.URI;
 import java.util.Properties;
 
@@ -19,12 +17,12 @@ public class ServerInfo {
 
     public static URI getBaseURI() {
         Properties appProperties=AppProperties.getProperties();
-        try {
+        /*try {
             appProperties.load(new FileInputStream("app.properties"));
 
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }*/
 
         return UriBuilder.fromUri(appProperties.getProperty("server.uri")).build();
     }

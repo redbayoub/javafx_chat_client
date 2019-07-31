@@ -18,17 +18,19 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class MediaPlayerUI {
     private VBox root_pane;
-    private File played_file;
+    //private File played_file;
+    private URL file_url;
+    private ContentType file_type;
     private MediaView  mediaView;
     private boolean mini_player=false;
 
-    public MediaPlayerUI(@NotNull Pane container_pane, File played_file,boolean mini_ui) throws IOException {
+    public MediaPlayerUI(@NotNull Pane container_pane, URL file_url,ContentType file_type,boolean mini_ui) throws IOException {
         FXMLLoader loader=null;
         if(mini_ui){
             loader = new FXMLLoader(getClass().getResource("MiniMediaPlayerUI.fxml"));
@@ -39,14 +41,20 @@ public class MediaPlayerUI {
         loader.setController(this);
         root_pane=loader.load();
         container_pane.getChildren().add(root_pane);
-        this.played_file=played_file;
-
+        //this.played_file=played_file;
+        this.file_url=file_url;
+        this.file_type=file_type;
         init_player(mini_ui);
     }
+    public void change_container_pane(Pane newContainerPane){
+        newContainerPane.getChildren().add(root_pane);
+    }
+
+
     Task<Void> prepare_mediaPlayer=new Task<Void>() {
         @Override
         protected Void call() throws Exception {
-            mediaPlayer=new MediaPlayer(new Media(played_file.toURI().toString()));
+            mediaPlayer=new MediaPlayer(new Media(file_url.toURI().toString()));
             if(mediaView!=null)mediaView.setMediaPlayer(mediaPlayer);
             mediaPlayer.setOnReady(() -> {
                 if(!mini_player){
@@ -82,7 +90,8 @@ public class MediaPlayerUI {
     };
     private void init_player(boolean mini_ui) {
         if(mini_ui){
-            switch (ContentType.get_type(played_file)){
+            //switch (ContentType.get_type(played_file)){
+            switch (file_type){
                 case Audio:{
                     break;
                 }
@@ -98,7 +107,8 @@ public class MediaPlayerUI {
                 }
             }
         }else{
-            switch (ContentType.get_type(played_file)){
+            //switch (ContentType.get_type(played_file)){
+            switch (file_type){
                 case Audio:{
                     // don't do anything
                     prepare_mediaPlayer.run();

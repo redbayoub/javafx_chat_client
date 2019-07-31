@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import javax.swing.*;
 import java.io.*;
-import java.nio.file.FileStore;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 

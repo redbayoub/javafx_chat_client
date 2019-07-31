@@ -1,5 +1,6 @@
 package chatapp.ui.mainView.AudioRecording;
 
+import chatapp.classes.ContentType;
 import chatapp.ui.mainView.DetailedAction;
 import chatapp.ui.mainView.MediaPlayer.MediaPlayerUI;
 import com.jfoenix.controls.JFXButton;
@@ -101,7 +102,7 @@ public class AudioRecording extends DetailedAction {
     private void init_play_recorded_pane() {
         try {
             play_recorded_pane.setVisible(true);
-            MediaPlayerUI player=new MediaPlayerUI(play_recorded_pane, getResult_file(),false);
+            MediaPlayerUI player=new MediaPlayerUI(play_recorded_pane, getResult_file().toURI().toURL(), ContentType.Audio,false);
         } catch (IOException e) {
             e.printStackTrace();
         }

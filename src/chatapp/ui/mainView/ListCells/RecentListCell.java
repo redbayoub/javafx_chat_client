@@ -24,7 +24,7 @@ import java.text.DateFormat;
     */
 
 public class RecentListCell extends JFXListCell<Message> {
-    private Image profile_image=new Image("/chatapp/images/defualt_user_avatar.png");
+    private Image profile_image=new Image("/images/defualt_user_avatar.png");
     private ImageView profile_image_view=new ImageView(profile_image);
 
     private Label sender_username=new Label();

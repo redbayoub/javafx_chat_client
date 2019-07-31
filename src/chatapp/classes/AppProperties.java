@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Properties;
 
 public class AppProperties {
@@ -42,7 +41,7 @@ public class AppProperties {
         }
         initAbsentProperties();
         if(tmp_dir==null){
-            tmp_dir=new File(URI.create(appProperties.getProperty("temp.directory.uri")));
+            tmp_dir=new File(System.getProperty("java.io.tmpdir"),"ChatApp");
         }
         return appProperties;
     }
@@ -70,12 +69,7 @@ public class AppProperties {
         if(appProperties.putIfAbsent("cache.directory.max.size", "200M")==null&&!absent_exist){
             absent_exist=true;
         };
-        if (!appProperties.containsKey("temp.directory.uri")){
-            if(!absent_exist)absent_exist=true;
-           tmp_dir=new File("tmp");
-           tmp_dir.mkdir();
-           appProperties.put("temp.directory.uri", tmp_dir.toURI().toString());
-        }
+
         if (!appProperties.containsKey("cache.directory.uri")){
             if(!absent_exist)absent_exist=true;
             File cache_dir=new File("cache");

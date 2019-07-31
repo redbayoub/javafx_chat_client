@@ -1,6 +1,3 @@
-import chatapp.ui.dialogs.Dialogs;
-import javafx.scene.image.Image;
-import org.junit.Assert;
 import org.junit.Test;
 
 

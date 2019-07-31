@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<VBox style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <StackPane fx:id="play_recorded_pane" prefHeight="60.0" prefWidth="325.0" />
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="200.0" spacing="10.0">
+         <children>
+            <JFXButton onAction="#take_a_video" text="Take a video" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+            <JFXButton layoutX="10.0" layoutY="10.0" onAction="#pick_a_video_from_files" text="Pick from files" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

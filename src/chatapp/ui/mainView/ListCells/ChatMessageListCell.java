@@ -15,9 +15,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
-import java.io.File;
+import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 public class ChatMessageListCell extends JFXListCell<Message> {
@@ -95,62 +97,93 @@ public class ChatMessageListCell extends JFXListCell<Message> {
             Pane pane=new Pane();
 
             if (item.isFile()){
-                setGraphic(new ProgressIndicator());
-                Thread thread=new Thread(() -> {
-                    File down_file=CacheController.get_file(item.getContent());
-                    Platform.runLater(() -> {
-                        Pane content_pane=new Pane();
-                        content_pane.setMaxWidth(250.0);
-                        switch (ContentType.get_type(down_file)){
-                            case Audio:{
+                if(Messages.mediaPlayers.containsKey(item.getId())){
+                    MediaPlayerUI playerUI=Messages.mediaPlayers.get(item.getId());
+                    Pane content_pane=new Pane();
+                    content_pane.setMaxWidth(250.0);
+                    playerUI.change_container_pane(content_pane);
+                    if(item.getSenderId()== AppProperties.currUser.getId()){
+                        hBox.getChildren().setAll(pane,content_pane);
+                    }else{
+                        hBox.getChildren().setAll(content_pane,pane);
+                    }
+                    HBox.setHgrow(pane, Priority.ALWAYS);
+                    setGraphic(hBox);
+                }else {
+                    setGraphic(new ProgressIndicator());
+                    Thread thread=new Thread(() -> {
+                        // TODO use url instead of files
+                        // ERORR cells are updating
+                        //File down_file=CacheController.get_file(item.getContent());
+                        URL url=null;
+                        String filename=null;
+                        try {
+                            url=new URL(AppProperties.getProperties().getProperty("server.uri")+"/upload/files/"+item.getContent());
+                            URLConnection connection=url.openConnection();
+                            filename=connection.getHeaderField(HttpHeaders.CONTENT_DISPOSITION);
 
-                                try {
-                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, down_file,true );
-                                    //item.setUserData(playerUI);
-                                    Messages.mediaPlayers.put(item.getId(),playerUI );
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        ContentType file_type=ContentType.get_type(filename);
+
+                        URL finalUrl = url;
+                        Platform.runLater(() -> {
+                            Pane content_pane=new Pane();
+                            content_pane.setMaxWidth(250.0);
+                            //switch (ContentType.get_type(down_file)){
+                            switch (file_type){
+                                case Audio:{
+
+                                    try {
+                                        MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, finalUrl,file_type,true );
+                                        //item.setUserData(playerUI);
+                                        Messages.mediaPlayers.put(item.getId(),playerUI );
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
-                            case Video:{
-                                try {
-                                    MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, down_file,true );
-                                    //item.setUserData(playerUI);
-                                    Messages.mediaPlayers.put(item.getId(),playerUI );
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                case Video:{
+                                    try {
+                                        MediaPlayerUI playerUI=new MediaPlayerUI(content_pane, finalUrl,file_type,true );
+                                        //item.setUserData(playerUI);
+                                        Messages.mediaPlayers.put(item.getId(),playerUI );
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
-                            case Image:{
-                                try {
-                                    ImageView imageView=new ImageView(down_file.toURI().toURL().toString());
+                                case Image:{
+                                    ImageView imageView=new ImageView(finalUrl.toString());
                                     imageView.setPreserveRatio(true);
                                     imageView.setFitWidth(250);
                                     //content_pane.setPrefHeight(200);
                                     imageView.setFitWidth(200);
                                     content_pane.getChildren().add(imageView);
-                                } catch (MalformedURLException e) {
-                                    e.printStackTrace();
-                                }
-                                break;
-                            }
-                            case File:{
 
-                                break;
+                                    break;
+                                }
+                                case File:{
+                                    // TODO
+                                    break;
+                                }
                             }
-                        }
-                        if(item.getSenderId()== AppProperties.currUser.getId()){
-                            hBox.getChildren().setAll(pane,content_pane);
-                        }else{
-                            hBox.getChildren().setAll(content_pane,pane);
-                        }
-                        HBox.setHgrow(pane, Priority.ALWAYS);
-                        setGraphic(hBox);
+                            if(item.getSenderId()== AppProperties.currUser.getId()){
+                                hBox.getChildren().setAll(pane,content_pane);
+                            }else{
+                                hBox.getChildren().setAll(content_pane,pane);
+                            }
+                            HBox.setHgrow(pane, Priority.ALWAYS);
+                            setGraphic(hBox);
+                        });
                     });
-                });
-                thread.start();
+                    thread.start();
+
+                }
 
             }else{
                 Label content=new Label();
@@ -169,7 +202,7 @@ public class ChatMessageListCell extends JFXListCell<Message> {
                     if((getIndex()-1>=0)&&
                             getListView().getItems().get(getIndex()-1).getSenderId()!=getItem().getSenderId()){
                         Image profile_image=CacheController.get_avatar(ServerServices.get_user_by_id(item.getSenderId()).getProfile_image_path());
-                        if(profile_image==null)profile_image=new Image("/chatapp/images/defualt_user_avatar.png");
+                        if(profile_image==null)profile_image=new Image("/images/defualt_user_avatar.png");
                         ImageView profile_image_view=new ImageView(profile_image);
                         profile_image_view.setFitHeight(25);
                         profile_image_view.setFitWidth(25);
