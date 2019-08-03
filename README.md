@@ -1,5 +1,5 @@
 # Chat Client
-
+# README NOT FINISHED
 A JavaFX app that alow users to read and create RSS feed
 
 
