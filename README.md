@@ -14,7 +14,7 @@ A JavaFX client implmentes my chat server REST API https://github.com/redayoub47
 ## Screenshots 
 ![main view](screenshots/main_view.png)
 ![sign in view](screenshots/sign_in_view.png)
-![cupture picture dialog](screenshots/cupture_picture_dialog.png)
+![cupture picture dialog](screenshots/capture_picture_dialog.png)
 ![cupture video dialog](screenshots/cupture_video_dialog.png)
 
 ## To run
