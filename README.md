@@ -1,19 +1,21 @@
 # Chat Client
-# README NOT FINISHED
-A JavaFX app that alow users to read and create RSS feed
+
+A JavaFX client implmentes my chat server REST API https://github.com/redayoub47/chat_server allows users to communicate ( Text, Viedo, Audio, File) privatly or in groups 
 
 
 
 ## What I Learned
-- Parse XML & Create XML Files
-- Retrieve input from url
-- Read and create RSS Feed
+- Create a REST API Client
+- Record Video and Audio
+- Take Pictures from webcam
+- Handle simultaneous API requests
+
 
 ## Screenshots 
-![main_view](screenshots/main_view.png)
-![menu](screenshots/menu.png)
-![create feed](screenshots/create_feed.png)
-![create view edit delete message](screenshots/create_view_edit_delete_message.png)
+![main view](screenshots/main_view.png)
+![sign in view](screenshots/sign_in_view.png)
+![cupture picture dialog](screenshots/cupture_picture_dialog.png)
+![cupture video dialog](screenshots/cupture_video_dialog.png)
 
 ## To run
 1. Download the release file  
